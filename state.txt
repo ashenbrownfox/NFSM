@@ -1,0 +1,23 @@
+2
+2
+1
+4
+q0
+q0 q1
+0 1
+q1
+q0 0 q0
+q0 1 q1
+q1 0 q1
+q1 1 q0
+
+key:
+number of states
+number of alphabets
+number of accepting states
+number of transitions
+Start State
+List of States
+List of the Alphabet
+List of Accepting States
+Transitions

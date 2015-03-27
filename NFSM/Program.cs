@@ -19,7 +19,7 @@ namespace NFSM
             Console.WriteLine("Initial Repository cloned!");
             //string path = ".//..//..//..//"; 
             Console.WriteLine("Hello World!");
-            String[] options = { "1) Read DFSM", "2) Read Input Strings", "3) Minimize", "4) Exit" };
+            String[] options = { "1) Read DFSM", "2) Read Input Strings", "3) Don't do anything", "4) Exit" };
             Boolean repeat = true;
             string line_buffer;
             //string Start_State = ""; int num_states = 0, num_alphabet = 0, num_accepting_states = 0, num_transitions = 0;
