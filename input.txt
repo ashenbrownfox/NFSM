@@ -1,6 +1,9 @@
 a
-aa
+b
+abbb
 aaa
+aaab
+ab
 aaaaa
 11111
 1111

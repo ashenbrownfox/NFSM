@@ -89,11 +89,11 @@ namespace NFSM
             }
 
             string[] Accepting_States = new string[num_accepting_states];
-            string[,] Finite_State_Array = new string[num_states, num_alphabet];
+            //string[,] Finite_State_Array = new string[num_states, num_alphabet];
             char[] Alphabet_Array = new char[num_alphabet];
             Start_State = sr.ReadLine();
             line_buffer = sr.ReadLine();
-
+            
             string[] States_Array = line_buffer.Split(' ');
             line_buffer = sr.ReadLine();
             arraybuffer = line_buffer.Split(' ');
@@ -103,16 +103,21 @@ namespace NFSM
             }
             line_buffer = sr.ReadLine();
             Accepting_States = line_buffer.Split(' ');
+            //start reading and storing the Transitions
             //string start, letter, next;
             string[] start_array = new string[num_transitions];
             char[] letter_array = new char[num_transitions];
             string[] next_array = new string[num_transitions];
+            //string[] det = new string[num_transitions];
             for (int i = 0; i < num_transitions; i++)
             {
                 line_buffer = sr.ReadLine();
                 arraybuffer = line_buffer.Split(' ');
                 char[] char_buffer = arraybuffer[1].ToCharArray();
-                start_array[i] = arraybuffer[0]; letter_array[i] = char_buffer[0]; next_array[i] = arraybuffer[2];
+                start_array[i] = arraybuffer[0]; 
+                letter_array[i] = char_buffer[0]; 
+                next_array[i] = arraybuffer[2];
+                
             }
             //String transition_state = "new Transition(\"q0\", '0', \"q0\")";
             #endregion
