@@ -100,75 +100,64 @@ namespace NFSM
         {
             UI.SuccessMessage("Ok. Checking: " + input);
             if (InvalidInputOrFSM(input)) { return; }
-            Boolean acceptance; Boolean espeon = true; StringBuilder steps;
+            Boolean espeon = true; StringBuilder steps;
             string currentState = Starting_State;
-            Transition transition = null;
+            string nextState;
+
             List<Transition> esp_trans = new List<Transition>();
             List<string> current_states = new List<string>();
             List<string> states_found = new List<string>();
-            //Look for any espilons connected to the current state. If found, go to that state
-            //thus all of these states count as current states
             current_states.Add(Starting_State);
             esp_trans = Transitions.FindAll(e => e.StartState == currentState && e.Symbol == 'E');
+            Transition transition;
+            //Look for any espilons connected to the current state. If found, go to the next state
             foreach (var t in esp_trans)
             {
                 current_states.Add(t.EndState);
             }
+
+            
+
             
             steps = new StringBuilder();
-
-            foreach (string state in current_states)
+            
+            foreach (char symbol in input.ToCharArray())
             {
-                currentState = state;
-                foreach (var symbol in input.ToCharArray())
+                
+                transition = Transitions.Find(t => t.StartState == currentState &&
+                                                    t.Symbol == symbol);
+                esp_trans = Transitions.FindAll(e => e.StartState == currentState && e.Symbol == symbol);
+                nextState = null;
+                foreach (string stat in current_states)
                 {
+                    //for each state p such taht (q,c,p) is in Delta do:
+                    // next state = next state U eps(s)
+                    currentState = stat;
                     transition = Transitions.Find(t => t.StartState == currentState &&
-                                                        t.Symbol == symbol);
-
-                    if (transition == null)
-                    {
-                        //UI.FailMessage("No transition found for "+currentState);
-                        //UI.FailMessage(steps.ToString());
-                        //return;
-                    }
-                    else
-                    {
-                        //UI.SuccessMessage("Found one Transition for "+currentState);
-                        currentState = transition.EndState;
-                    }
-                    steps.Append(transition + "\n");
+                                                   t.Symbol == symbol);
+                    currentState = transition.EndState;
                 }
-                try
+                currentState = nextState;
+                if (transition == null)
                 {
-                    if (Final_States.Contains(transition.EndState))
-                    {
-                        states_found.Add(transition.EndState);
-                    }
-                    
-                }
-                catch(Exception ex)
-                {
-                    //UI.Write("No end state found for this transition.");
+                    UI.FailMessage("No transitions for current state and symbol");
+                    //UI.FailMessage(steps.ToString());
+                    return;
                 }
                 
+                currentState = transition.EndState;
+                steps.Append(transition + "\n");
             }
             if (Final_States.Intersect(states_found).Any())
             {
-                UI.SuccessMessage("ACCEPTED!");
-                return;
-            }
-            /*
-            if (Final_States.Contains(currentState))
-            {
-                UI.SuccessMessage("Accepted the input with steps:\n" + steps);
+                //UI.SuccessMessage("Accepted the input with steps:\n" + steps);
                 UI.SuccessMessage("Accepted!");
                 return;
             }
-             * */
-            //UI.FailMessage("Stopped in state " + currentState +
-             //                   " which is not a final state.");
+            UI.FailMessage("Stopped in state " + currentState +
+                                " which is not a final state.");
             //UI.FailMessage(steps.ToString());
-            UI.FailMessage("REJECTED!");
+            UI.FailMessage("Rejected!");
         }
 
         /**
@@ -221,6 +210,11 @@ namespace NFSM
         private bool NoFinalStates()
         {
             return Final_States.Count == 0;
+        }
+        private IEnumerable<Transition> GetAllTransitions(string currentState, char symbol)
+        {
+            return Transitions.FindAll(t => t.StartState == currentState &&
+                         t.Symbol == symbol);
         }
     }
 }
