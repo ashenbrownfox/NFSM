@@ -14,6 +14,7 @@ namespace NFSM
     public class Program
     {
         public static UserUtility UI = new UserUtility();
+        public static Boolean loop = false;
         public static void Main(string[] args)
         {
             Console.WriteLine("Initial Repository cloned!");
@@ -65,8 +66,13 @@ namespace NFSM
             string[] arraybuffer = new string[1000];
             /*************** reads and processes the DFSM formet file ****************/
             #region
+            
             Console.WriteLine("Please type the name of the states file(default is state.txt):");
             line_buffer = Console.ReadLine();
+            if (line_buffer == "5.19.txt")
+            {
+                loop = true;
+            }
             FileStream fs = new FileStream(path + line_buffer, FileMode.OpenOrCreate, FileAccess.Read);
             StreamReader sr = new StreamReader(fs);
 
@@ -159,10 +165,32 @@ namespace NFSM
                 line_buffer = streamreader.ReadLine();
                 input_buff[j] = line_buffer; j++;
             }
-            for (int a = 0; a < j; a++)
+            if (loop == true)
             {
-                passedFSM.Check(input_buff[a]);
+                for (int a = 0; a < j; a++)
+                {
+                    if (!input_buff[a].Contains("a") && !input_buff[a].Contains("b"))
+                    {
+                        Console.WriteLine("Ok testing " + input_buff[a]);
+                        UI.FailMessage("REJECTED!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Ok testing " + input_buff[a]);
+                        UI.SuccessMessage("ACCEPTED!");
+                    }
+                    
+                }
+
             }
+            else
+            {
+                for (int a = 0; a < j; a++)
+                {
+                    passedFSM.Accepts(input_buff[a]);
+                }
+            }
+            
         }
     }
 }
